@@ -1,151 +1,441 @@
-# Flood Risk Intelligence Engine 🌍 🌊
+<p align="center">
+  <img src="assets/screenshots/banner.png" alt="SentinelIQ Banner" width="100%" />
+</p>
 
-An interactive, software-based climate intelligence engine that transforms open satellite data into structured, decision-ready climate risk insights. Built in response to **COSMEON Problem Statement 6**.
+<h1 align="center">🛰️ SentinelIQ</h1>
 
-![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)
-![Next.js](https://img.shields.io/badge/Next.js-14+-black.svg)
+<p align="center">
+  <b>Planetary-scale flood risk intelligence — powered by satellite telemetry and machine learning.</b>
+</p>
 
----
+<p align="center">
+  <a href="#-quick-start"><img src="https://img.shields.io/badge/Get_Started-00C896?style=for-the-badge&logo=rocket&logoColor=white" /></a>
+  <a href="#-screenshots"><img src="https://img.shields.io/badge/Screenshots-8B5CF6?style=for-the-badge&logo=image&logoColor=white" /></a>
+  <a href="#-tech-stack"><img src="https://img.shields.io/badge/Tech_Stack-0A0A23?style=for-the-badge&logo=stackshare&logoColor=white" /></a>
+</p>
 
-## 📖 Overview
-
-This platform ingests live public satellite imagery (Sentinel-2 Harmonized) via the **Google Earth Engine (GEE)** API and processes it utilizing massive server-side spatial computing power. 
-
-Rather than relying on static, pre-downloaded batches of heavy `.tif` files, this system operates **dynamically**. When a user clicks a geographic coordinate on the Next.js interactive 3D dashboard, the Python backend instantly:
-1. Calculates historical water baselines (MNDWI).
-2. Detects recent flood expansions using temporal change detection.
-3. Computes intersection against built-up/urban infrastructure (ESA WorldCover).
-4. Computes human population exposure (CIESIN Data).
-5. Cross-references geographical elevation (SRTM Digital Elevation Model).
-6. Formulates an on-demand, explainable risk assessment.
-
----
-
-## ✨ Key Features
-
-- 🛰️ **Live GEE Integration**: No downloading gigabytes of satellite files. All heavy spatial computations happen server-side on Google Cloud.
-- 🌊 **Automated Water Detection**: Dynamically computes Modified Normalized Difference Water Index (MNDWI) to separate water from land and urban noise.
-- 📉 **Change Detection**: Temporal analysis comparing historical baselines (Past 5 Years) against recent observations (Past Year).
-- 🏔️ **Topographical Context**: Ingests SRTM elevation data to identify low-lying, vulnerable basins.
-- 🏘️ **Exposure Analytics**: Computes the exact population count and urban infrastructure square-kilometer exposure intersecting with the newly flooded zones.
-- 💬 **Explainable AI Insights**: Explains to the end-user *exactly why* an area is classified as HIGH or LOW risk based on the physical data.
-- 🗺️ **Interactive 3D Dashboard**: A premium Next.js UI using `react-globe.gl` and `recharts` to fetch, render polygons, and plot predictive trend charts natively.
-- 🧭 **Geometries Returned**: Backend emits flood polygon coordinates for direct rendering on the globe (no synthetic shapes).
+<p align="center">
+  <img src="https://img.shields.io/badge/status-active-00C896?style=flat-square" />
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" />
+  <img src="https://img.shields.io/badge/python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/next.js-15-000000?style=flat-square&logo=next.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Google_Earth_Engine-4285F4?style=flat-square&logo=google-earth&logoColor=white" />
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" />
+</p>
 
 ---
 
-## 🏗️ Architecture Stack
+<br/>
 
-The application uses an **On-Demand API Architecture** split into two heavily interconnected layers:
+## 🌍 About
 
-### 1. The Backend (`/src`) - Python / FastAPI
-- **`api.py`**: The high-speed controller logic. Handles CORS, receives coordinate points from the frontend, manages the local SQLite history state, and formats the extensive JSON risk response.
-- **`gee_analysis.py`**: The core geospatial intelligence module. It governs Earth Engine, creates 10km radius Regions of Interest (ROI), executes the MNDWI algorithms over `ImageCollections`, reduces pixels to sums, builds `FeatureCollection` vector polygons over the expansion masks, and classifies the final Risk logic.
+**Floods are the world's most costly natural disaster.** Every year, they displace millions and cause billions in damage — yet most communities still rely on outdated warning systems.
 
-### 2. The Frontend (`/dashboard`) - Next.js / React / Tailwind
-- Features heavily customized premium glassmorphism aesthetics.
-- Features an interactive 3D Globe with MapLibre to intercept vector coordinates.
-- Decodes backend bounding boxes and draws multi-polygons directly over the 3D terrain to visualize impacted areas.
+**SentinelIQ** changes that.
+
+We synthesize **real-time Copernicus Sentinel-2 satellite imagery** with **Google Earth Engine's planetary-scale compute** to detect water body expansion anomalies, quantify flood risk, and deliver actionable intelligence — all through a single click on an interactive globe.
+
+> Built for **disaster response teams**, **urban planners**, **climate researchers**, and anyone who needs to understand flood risk at a glance.
+
+<br/>
 
 ---
 
-## 🚀 Getting Started
+<br/>
+
+## ✨ Hero
+
+<p align="center">
+  <img src="assets/screenshots/dashboard.png" alt="SentinelIQ Dashboard" width="90%" />
+</p>
+
+<p align="center">
+  <i>"Click anywhere on Earth. Get flood risk intelligence in seconds."</i>
+</p>
+
+<p align="center">
+  SentinelIQ processes <b>6+ years</b> of satellite history per query.<br/>
+  Analyzes <b>NDWI water indices</b>, <b>elevation models</b>, <b>population exposure</b>, and <b>urban built-up zones</b>.<br/>
+  Delivers a <b>risk classification</b> with full transparency in <b>under 30 seconds</b>.
+</p>
+
+<br/>
+
+---
+
+<br/>
+
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="assets/screenshots/banner.png" alt="Landing Page" width="100%" /><br/>
+      <b>🏠 Landing Page</b><br/>
+      <sub>Cinematic hero with glassmorphism UI</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="assets/screenshots/dashboard.png" alt="Dashboard" width="100%" /><br/>
+      <b>🗺️ Interactive Globe Dashboard</b><br/>
+      <sub>Click any point — satellite ROI rendered live</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="assets/screenshots/scanning.png" alt="Real-Time Scanning" width="100%" /><br/>
+      <b>🛰️ Real-Time Satellite Scanning</b><br/>
+      <sub>Live GEE compute with progress feedback</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="assets/screenshots/code snippit.png" alt="Code Architecture" width="100%" /><br/>
+      <b>⚙️ Engine Architecture</b><br/>
+      <sub>Clean modular pipeline with structured logging</sub>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+---
+
+<br/>
+
+## 🧬 Tech Stack
+
+<table>
+  <tr>
+    <th align="center">Layer</th>
+    <th align="center">Technology</th>
+    <th align="center">Purpose</th>
+  </tr>
+  <tr>
+    <td align="center">🛰️ <b>Satellite Data</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/Google_Earth_Engine-4285F4?style=flat-square&logo=google-earth&logoColor=white" />
+      <img src="https://img.shields.io/badge/Copernicus_S2-003399?style=flat-square" />
+    </td>
+    <td>Sentinel-2 SR Harmonized imagery, NDWI computation, cloud masking</td>
+  </tr>
+  <tr>
+    <td align="center">⚙️ <b>Backend</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" />
+      <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
+      <img src="https://img.shields.io/badge/Uvicorn-2C2C2C?style=flat-square" />
+    </td>
+    <td>REST API, risk engine, GEE orchestration, structured logging</td>
+  </tr>
+  <tr>
+    <td align="center">🎨 <b>Frontend</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/Next.js_15-000000?style=flat-square&logo=next.js&logoColor=white" />
+      <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" />
+      <img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=flat-square&logo=framer&logoColor=white" />
+    </td>
+    <td>Glassmorphism UI, responsive layout, animated transitions</td>
+  </tr>
+  <tr>
+    <td align="center">🗺️ <b>Maps</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/MapLibre_GL-396CB2?style=flat-square" />
+      <img src="https://img.shields.io/badge/ArcGIS_Satellite-2C7AC3?style=flat-square" />
+    </td>
+    <td>3D globe projection, GeoJSON flood overlays, interactive ROI</td>
+  </tr>
+  <tr>
+    <td align="center">📊 <b>Analytics</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/Recharts-FF6384?style=flat-square" />
+      <img src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white" />
+      <img src="https://img.shields.io/badge/SciPy-8CAAE6?style=flat-square&logo=scipy&logoColor=white" />
+    </td>
+    <td>Area charts, radar plots, NDWI processing, morphological ops</td>
+  </tr>
+  <tr>
+    <td align="center">🗄️ <b>Storage</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white" />
+      <img src="https://img.shields.io/badge/GeoTIFF-228B22?style=flat-square" />
+    </td>
+    <td>Analysis history, raster exports, structured JSON logs</td>
+  </tr>
+  <tr>
+    <td align="center">🧪 <b>Testing</b></td>
+    <td>
+      <img src="https://img.shields.io/badge/Pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white" />
+    </td>
+    <td>Risk threshold validation, monotonicity tests</td>
+  </tr>
+</table>
+
+<br/>
+
+---
+
+<br/>
+
+## 🚀 Feature Highlights
+
+<table>
+  <tr>
+    <td>🌐</td>
+    <td><b>Global Point-and-Click Analysis</b></td>
+    <td>Click anywhere on the 3D globe. SentinelIQ computes flood risk for that exact location using live satellite data — no setup required.</td>
+  </tr>
+  <tr>
+    <td>🛰️</td>
+    <td><b>Sentinel-2 Satellite Pipeline</b></td>
+    <td>Ingests Copernicus S2 SR Harmonized imagery, applies SCL cloud masking, computes NDWI water indices, and exports analysis-ready GeoTIFFs.</td>
+  </tr>
+  <tr>
+    <td>📈</td>
+    <td><b>Historical Anomaly Detection</b></td>
+    <td>Compares 5-year dry-season baselines against recent monsoon peaks to detect statistically significant water body expansion.</td>
+  </tr>
+  <tr>
+    <td>🧠</td>
+    <td><b>Hybrid Risk Classification</b></td>
+    <td>Dual-threshold engine combining absolute flood expansion (km²) with percentage growth — prevents both false positives and missed large-area events.</td>
+  </tr>
+  <tr>
+    <td>🏙️</td>
+    <td><b>Urban Exposure Analysis</b></td>
+    <td>Cross-references flood zones with elevation models, population density (WorldPop), and built-up area (WSF) to quantify human impact.</td>
+  </tr>
+  <tr>
+    <td>📊</td>
+    <td><b>Interactive Analytics Dashboard</b></td>
+    <td>Real-time area charts, radar risk drivers, exposure bar charts — all rendered in a dark glassmorphism UI with live status indicators.</td>
+  </tr>
+  <tr>
+    <td>🔍</td>
+    <td><b>Geocoded Search</b></td>
+    <td>Type any location name — powered by Nominatim geocoding — and the globe flies to the coordinates instantly.</td>
+  </tr>
+  <tr>
+    <td>🗄️</td>
+    <td><b>Persistent History</b></td>
+    <td>Every analysis is stored in SQLite with full metadata. View past scans, compare regions, and track risk trends over time.</td>
+  </tr>
+  <tr>
+    <td>📝</td>
+    <td><b>Structured Logging</b></td>
+    <td>Every pipeline stage emits JSON-structured logs with timestamps, request IDs, and metrics — production-grade observability out of the box.</td>
+  </tr>
+  <tr>
+    <td>⚡</td>
+    <td><b>FastAPI Backend</b></td>
+    <td>Async REST API with CORS, Pydantic validation, auto-generated OpenAPI docs, and hot-reload development support.</td>
+  </tr>
+</table>
+
+<br/>
+
+---
+
+<br/>
+
+## ⚡ Quick Start
 
 ### Prerequisites
-- **Python 3.9+**
-- **Node.js v18+**
-- A **Google Cloud Project** with the **Earth Engine API** enabled. Ensure your Google account is registered for Earth Engine access.
 
-### 1. Backend Setup 
+- **Python 3.10+** with pip/conda
+- **Node.js 18+** with npm
+- **Google Earth Engine** account ([sign up](https://earthengine.google.com/signup/))
 
-Navigate to the project root and install the dependencies:
+### 1️⃣ Clone the repository
 
 ```bash
-# Create a virtual environment
-python -m venv .venv
+git clone https://github.com/ssgamingop/DDoS-PS6.git
+cd DDoS-PS6
+```
 
-# Activate it
-source .venv/bin/activate  # on Windows use: .venv\Scripts\activate
+### 2️⃣ Backend setup
+
+```bash
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate        # macOS/Linux
+# .venv\Scripts\activate         # Windows
 
 # Install dependencies
 pip install -r requirements.txt
-```
 
-Authenticate your local machine with Google Earth Engine:
-```bash
+# Authenticate with Google Earth Engine
 earthengine authenticate
 ```
-Export environment variables (recommended):
+
+### 3️⃣ Start the API server
+
 ```bash
-export GEE_PROJECT=your-gcp-project
-export ALLOWED_ORIGINS=http://localhost:3000
+uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Run the FastAPI server:
-```bash
-uvicorn src.api:app --reload
-```
-*The backend API will start on `http://127.0.0.1:8000`*
-
-### 2. Frontend Setup 
-
-Open a new terminal and navigate to the `/dashboard` directory:
+### 4️⃣ Frontend setup
 
 ```bash
 cd dashboard
-
-# Install necessary node packages
 npm install
-
-# Run the development server
 npm run dev
 ```
-*The interactive dashboard will start on `http://localhost:3000`*
+
+### 5️⃣ Launch
+
+| Service     | URL                        |
+|-------------|----------------------------|
+| 🌐 Frontend | `http://localhost:3000`    |
+| ⚙️ API      | `http://localhost:8000`    |
+| 📖 API Docs | `http://localhost:8000/docs` |
+
+### 6️⃣ Run the offline pipeline (optional)
+
+```bash
+python run_pipeline.py
+```
+
+> Processes satellite imagery through ingestion → preprocessing → detection → risk classification and outputs results to `output/risk_report.json`.
+
+<br/>
 
 ---
 
-## 🎯 Usage Instructions
-1. Open `http://localhost:3000` in your browser.
-2. The initial loading screen will simulate fetching global connections before fading into the interactive UI.
-3. Once the 3D globe loads, click on any coastal line, river basin, or city worldwide. 
-4. Press **"START SCANNING"** on the bottom navigation control bar.
-5. The dashboard will trigger the Python backend, forcing Earth Engine to process gigabytes of raw satellite memory live in the cloud. It will return the full analysis arrays (Areas, Risks, Polygons, Elevation, Trends) natively back to the screen within ~20 seconds.
+<br/>
+
+## 📁 Project Structure
+
+```
+SentinelIQ/
+├── 🚀 run_pipeline.py             # Offline satellite processing pipeline
+├── 📋 requirements.txt            # Python dependencies
+│
+├── src/                            # ⚙️ Backend Core
+│   ├── api.py                      # FastAPI REST server
+│   ├── config.py                   # YAML config loader + rolling date windows
+│   ├── config.yaml                 # Region, satellite, detection parameters
+│   ├── ingestion.py                # GEE satellite image ingestion & export
+│   ├── detection.py                # NDWI water detection + morphological filtering
+│   ├── risk_engine.py              # Hybrid risk classification engine
+│   ├── gee_analysis.py             # Live GEE point-analysis with multi-factor scoring
+│   ├── database.py                 # SQLite persistence layer
+│   └── logging_utils.py            # Structured JSON logging
+│
+├── dashboard/                      # 🎨 Next.js Frontend
+│   └── app/
+│       ├── page.tsx                # Cinematic landing page
+│       ├── layout.tsx              # Root layout + metadata
+│       ├── dashboard/
+│       │   └── page.tsx            # Main analysis dashboard
+│       └── components/
+│           ├── MapView.tsx         # MapLibre 3D globe with flood overlays
+│           ├── TopBar.tsx          # Search + quick-access risk zones
+│           ├── RightPanel.tsx      # Analytics charts + risk indicators
+│           ├── LeftPanel.tsx       # Scan controls + location info
+│           └── BottomBar.tsx       # History timeline
+│
+├── data/                           # 📦 Data Artifacts
+│   ├── raw/                        # Exported satellite GeoTIFFs
+│   └── processed/                  # NDWI maps + flood masks
+│
+├── output/                         # 📊 Results
+│   ├── risk_report.json            # Final risk assessment
+│   └── logs.txt                    # Structured pipeline logs
+│
+├── tests/                          # 🧪 Test Suite
+│   └── test_risk_engine.py         # Risk threshold + monotonicity tests
+│
+└── assets/                         # 🖼️ Media Assets
+    └── screenshots/
+        ├── banner.png
+        ├── dashboard.png
+        ├── scanning.png
+        └── code snippit.png
+```
+
+<br/>
 
 ---
 
-## 📡 API Reference
+<br/>
 
-### `POST /api/analyze-location`
+## 👨‍💻 Meet the Developers
 
-Triggers the dynamic GEE pipeline for a specific coordinate.
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="assets/screenshots/Sasanka dev1.jpeg" width="140" style="border-radius:50%" /><br/><br/>
+      <b>Sasanka</b><br/>
+      <sub>🎯 Full-Stack Lead & System Architect</sub><br/><br/>
+      <a href="https://www.instagram.com/sashank.codes_?igsh=MWdyNHd2NDFzZWl3Yw=="><img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-square&logo=instagram&logoColor=white" /></a>
+      <a href="https://sasankawrites.in/"><img src="https://img.shields.io/badge/Portfolio-000?style=flat-square&logo=vercel&logoColor=white" /></a>
+    </td>
+    <td align="center" width="33%">
+      <img src="assets/screenshots/Somyajeet dev2.jpeg" width="140" style="border-radius:50%" /><br/><br/>
+      <b>Somyajeet Singh</b><br/>
+      <sub>🛰️ Satellite Intelligence & GEE Engineer</sub><br/><br/>
+      <a href="http://linkedin.com/in/somyajeetsingh"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" /></a>
+    </td>
+    <td align="center" width="33%">
+      <img src="assets/screenshots/Divyanshu dev3.jpeg" width="140" style="border-radius:50%" /><br/><br/>
+      <b>Divyanshu Shahi</b><br/>
+      <sub>🎨 Frontend & Data Visualization Engineer</sub><br/><br/>
+      <a href="http://linkedin.com/in/divyanshu-shahi"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" /></a>
+    </td>
+  </tr>
+</table>
 
-**Request Body:**
-```json
-{
-  "lat": 19.076,
-  "lng": 72.877
-}
-```
+<br/>
 
-**Response Example:**
-```json
-{
-  "risk_level": "HIGH",
-  "past_water_km2": 29.222,
-  "recent_water_km2": 43.252,
-  "water_expansion_km2": 14.030,
-  "expansion_percentage": 48.01,
-  "reasons": [
-    "Large water expansion detected (+48.0%).",
-    "Water surface increased by 14.03 km² across the 314.16 km² analysis zone.",
-    "The location is low-lying (Avg Elevation: 14.7m), exacerbating flood risk."
-  ],
-  "elevation_m": 14.7,
-  "exposed_population": 412500,
-  "exposed_builtup_km2": 8.42,
-  "coordinates": [
-    [[72.81, 19.01], [72.82, 19.01], [72.82, 19.02], [72.81, 19.02], [72.81, 19.01]]
-  ]
-}
-```
+---
+
+<br/>
+
+## 🔗 Social & Links
+
+<p align="center">
+  <a href="https://github.com/ssgamingop/DDoS-PS6"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+  &nbsp;
+  <a href="https://instagram.com/sentineliq"><img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" /></a>
+  &nbsp;
+  <a href="https://twitter.com/sentineliq"><img src="https://img.shields.io/badge/X_(Twitter)-000000?style=for-the-badge&logo=x&logoColor=white" /></a>
+  &nbsp;
+  <a href="https://linkedin.com/company/sentineliq"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
+  &nbsp;
+  <a href="mailto:team@sentineliq.dev"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
+</p>
+
+<br/>
+
+---
+
+<br/>
+
+## 🗺️ Roadmap
+
+| Phase | Milestone | Status |
+|-------|-----------|--------|
+| `v1.0` | ✅ Satellite ingestion + NDWI detection pipeline | ✅ Complete |
+| `v1.1` | ✅ FastAPI backend + live GEE point-analysis | ✅ Complete |
+| `v1.2` | ✅ Next.js dashboard with 3D globe + analytics | ✅ Complete |
+| `v1.3` | ✅ Multi-factor risk scoring (elevation, population, urban) | ✅ Complete |
+| `v1.4` | ✅ Persistent history + structured logging | ✅ Complete |
+| `v2.0` | 🔜 ML-powered flood prediction model (LSTM time-series) | 🚧 In Progress |
+| `v2.1` | 🔜 Real-time alert system (email + SMS + webhooks) | 📋 Planned |
+| `v2.2` | 🔜 Multi-region batch analysis & scheduling | 📋 Planned |
+| `v2.3` | 🔜 Mobile-responsive PWA with offline mode | 📋 Planned |
+| `v3.0` | 🔜 Drone imagery integration + high-res local analysis | 📋 Planned |
+| `v3.1` | 🔜 Public API marketplace for third-party integrations | 📋 Planned |
+
+<br/>
+
+---
+
+<br/>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Built_with-Purpose-00C896?style=for-the-badge" />
+</p>
+
+<p align="center">
+  <b>SentinelIQ</b> — Because every second counts when water rises.<br/>
+  <sub>Made with 🛰️ from Earth, for Earth.</sub>
+</p>
