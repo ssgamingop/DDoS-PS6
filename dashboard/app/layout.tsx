@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Flood Risk Dashboard",
-  description: "UI MVP for climate risk and flood analytics",
+  title: "SentinentalIQ | Flood Risk Intelligence",
+  description: "Advanced climate risk and flood analytics engine",
 };
 
 export default function RootLayout({

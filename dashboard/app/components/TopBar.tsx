@@ -21,10 +21,10 @@ export default function TopBar({ onSearch, onSelectLocation }: { onSearch: (val:
     return (
         <div className="pointer-events-none">
             <div className="glass-panel px-3 py-2.5 md:px-4 md:py-3 flex items-center gap-3 pointer-events-auto">
-                <div className="hidden sm:flex items-center gap-2 text-white font-semibold whitespace-nowrap text-[15px] min-w-[170px]">
+                <a href="/" className="hidden sm:flex items-center gap-2 text-white font-semibold whitespace-nowrap text-[15px] min-w-[170px] hover:text-cyan-400 transition-colors">
                     <span>🌍</span>
-                    <span>DDos Dashboard</span>
-                </div>
+                    <span>SentinentalIQ</span>
+                </a>
 
                 <form onSubmit={handleSubmit} className="relative flex-1 w-full max-w-3xl mx-auto">
                     <input

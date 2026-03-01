@@ -1,195 +1,80 @@
-"use client"
+import Link from "next/link";
+import { ArrowRight, Globe2, Activity, ShieldAlert } from "lucide-react";
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Globe } from "lucide-react"
-import dynamic from "next/dynamic"
-import { FloodData } from "./data/types"
-
-import TopBar from "./components/TopBar"
-import LeftPanel from "./components/LeftPanel"
-import RightPanel from "./components/RightPanel"
-import BottomBar from "./components/BottomBar"
-
-const MapView = dynamic(() => import("./components/MapView"), { ssr: false })
-
-export default function Page() {
-  const [initialLoading, setInitialLoading] = useState(true)
-  const [analyzing, setAnalyzing] = useState(false)
-  const [data, setData] = useState<FloodData | null>(null)
-  const [analysisError, setAnalysisError] = useState<string | null>(null)
-
-  // State for user's selected map point
-  const [selectedLocation, setSelectedLocation] = useState<{ lat: number, lng: number } | null>(null)
-
-  useEffect(() => {
-    setTimeout(() => setInitialLoading(false), 2000)
-  }, [])
-
-  // Geocode Search handler
-  const handleSearch = async (val: string) => {
-    try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(val)}&format=json&limit=1`, {
-        headers: { "User-Agent": "ClimateRiskEngine/1.0" }
-      })
-      const results = await res.json()
-      if (results && results.length > 0) {
-        const { lat, lon } = results[0]
-        setSelectedLocation({ lat: parseFloat(lat), lng: parseFloat(lon) })
-        setData(null) // clear previous data on new selection
-        setAnalysisError(null)
-      }
-    } catch (err) {
-      console.error("Search failed", err)
-    }
-  }
-
-  // Handle Location click from Global Risk Zones in TopBar
-  const handleSelectPredefined = (loc: { lat: number, lng: number }) => {
-    setSelectedLocation({ lat: loc.lat, lng: loc.lng })
-    setData(null)
-    setAnalysisError(null)
-  }
-
-  // Handle map click
-  const handleMapClick = (lat: number, lng: number) => {
-    setSelectedLocation({ lat, lng })
-    setData(null)
-    setAnalysisError(null)
-  }
-
-  // Core API logic moved to the exact parent component
-  const triggerScan = async () => {
-    if (!selectedLocation) return
-    setAnalyzing(true)
-    setAnalysisError(null)
-
-    const { lat, lng } = selectedLocation
-    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-
-    try {
-      const res = await fetch(`${API_BASE}/api/analyze-location`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lat, lng })
-      })
-      const apiData = await res.json()
-      if (!res.ok) {
-        const detail = typeof apiData?.detail === "string" ? apiData.detail : "Analysis request failed."
-        throw new Error(detail)
-      }
-
-      const riskString = apiData.risk_level === 'HIGH' ? "High" : apiData.risk_level === 'MODERATE' ? "Moderate" : "Low"
-      const mappedData: FloodData = {
-        region: `Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)}`,
-        flood_area: apiData.water_expansion_km2,
-        population: apiData.exposed_population || 0,
-        change: `+${apiData.expansion_percentage}%`,
-        risk: riskString,
-        lat,
-        lng,
-        reasons: apiData.reasons,
-        trend: [
-          { day: "Past", flood: Number(apiData.past_water_km2 || 0) },
-          { day: "Recent", flood: Number(apiData.recent_water_km2 || 0) }
-        ],
-        elevation_m: apiData.elevation_m,
-        exposed_builtup_km2: apiData.exposed_builtup_km2,
-        coordinates: apiData.coordinates || []
-      }
-      setData(mappedData)
-    } catch (err) {
-      console.error("API Error", err)
-      setData(null)
-      setAnalysisError(err instanceof Error ? err.message : "Unable to complete analysis. Please retry.")
-    } finally {
-      setAnalyzing(false)
-    }
-  }
-
+export default function LandingPage() {
   return (
-    <>
-      <AnimatePresence>
-        {initialLoading && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#05070d] text-cyan-400"
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-              className="mb-8"
-            >
-              <Globe size={64} />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-xl tracking-widest uppercase font-semibold"
-            >
-              Initializing Climate Engine...
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="min-h-screen bg-[#050510] relative overflow-hidden flex flex-col items-center justify-center font-sans">
+      {/* Dynamic Background Glows */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-cyan-700/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-blue-700/20 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="w-screen h-screen bg-black relative overflow-hidden text-white transition-opacity duration-500">
+      {/* Pure CSS Grid Pattern with Fade-Out Mask */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_0%,#000_40%,transparent_100%)] pointer-events-none" />
 
-        {/* Noise Overlay */}
-        <div className="absolute inset-0 pointer-events-none z-10 mix-blend-overlay opacity-10" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")" }} />
+      {/* Content Container */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 text-center pt-32 pb-32">
 
-        {/* MAP / GLOBE View */}
-        <div className="absolute inset-0 z-0">
-          <MapView
-            selectedLocation={selectedLocation}
-            onLocationSelect={handleMapClick}
-            data={data}
-          />
+        {/* Live Badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs mb-10 font-medium tracking-widest uppercase">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+          </span>
+          Engine Online
         </div>
 
-        {/* MAP DIM EFFECT via CSS class */}
-        <div className="map-overlay" />
+        {/* Hero Headline */}
+        <h1 className="text-5xl md:text-8xl font-extrabold tracking-tighter text-white mb-6 leading-tight drop-shadow-2xl">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400">SentinentalIQ</span>
+        </h1>
 
-        {/* BACKGROUND OVERLAY (CRITICAL) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/80 pointer-events-none z-10" />
+        <p className="text-lg md:text-2xl text-gray-300/90 max-w-3xl mx-auto mb-14 font-light leading-relaxed">
+          Planetary-scale flood risk intelligence. Synthesize real-time satellite telemetry to detect historic anomalies and quantify environmental threats instantly.
+        </p>
 
-        {!initialLoading && (
-          <>
-            <div className="absolute inset-0 z-20 flex flex-col px-4 pt-4 pb-24 md:px-6 pointer-events-none">
-              <TopBar onSearch={handleSearch} onSelectLocation={handleSelectPredefined} />
+        {/* CTA Button */}
+        <Link
+          href="/dashboard"
+          className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-2xl transition-all duration-300 shadow-[0_0_40px_-10px_rgba(34,211,238,0.4)] hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.7)] hover:-translate-y-1 overflow-hidden"
+        >
+          {/* Button inner shine effect */}
+          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
 
-              <div className="mt-4 hidden lg:grid flex-1 grid-cols-[minmax(0,410px)_1fr_minmax(0,340px)] gap-5 pointer-events-none">
-                <div className="pointer-events-auto self-start">
-                  <RightPanel data={data} selectedLocation={selectedLocation} analysisError={analysisError} />
-                </div>
-                <div />
-                <div className="pointer-events-auto self-start justify-self-end">
-                  <LeftPanel data={data} selectedLocation={selectedLocation} analysisError={analysisError} />
-                </div>
-              </div>
+          <span className="text-lg tracking-wide">Launch Dashboard</span>
+          <ArrowRight className="group-hover:translate-x-1.5 transition-transform duration-300" />
+        </Link>
 
-              <div className="mt-3 space-y-3 lg:hidden pointer-events-auto overflow-y-auto max-h-[calc(100vh-220px)] pr-1">
-                <RightPanel data={data} selectedLocation={selectedLocation} analysisError={analysisError} />
-                <LeftPanel data={data} selectedLocation={selectedLocation} analysisError={analysisError} />
-              </div>
-            </div>
-
-            {analysisError && (
-              <div className="absolute left-1/2 -translate-x-1/2 bottom-24 z-40 px-4 py-2 rounded-lg border border-rose-400/35 bg-rose-950/70 backdrop-blur text-rose-100 text-sm max-w-[min(90vw,620px)] text-center">
-                {analysisError}
-              </div>
-            )}
-
-            <BottomBar
-              analyzing={analyzing}
-              selectedLocation={selectedLocation}
-              onScan={triggerScan}
-            />
-          </>
-        )}
+        {/* Features Row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-32 max-w-5xl mx-auto">
+          <FeatureCard
+            icon={<Globe2 className="w-7 h-7 text-cyan-400" />}
+            title="Global Telemetry"
+            desc="Process high-resolution Earth Engine data anywhere on the globe in real-time."
+          />
+          <FeatureCard
+            icon={<Activity className="w-7 h-7 text-blue-400" />}
+            title="Anomaly Detection"
+            desc="Cross-reference deep historical baselines against current planetary events."
+          />
+          <FeatureCard
+            icon={<ShieldAlert className="w-7 h-7 text-indigo-400" />}
+            title="Risk Extraction"
+            desc="Synthesize urban sprawl, geometric exposure, and topological severity instantly."
+          />
+        </div>
       </div>
-    </>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+  return (
+    <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 text-left hover:bg-white/[0.04] hover:border-cyan-500/20 transition-all duration-500 group">
+      <div className="w-14 h-14 bg-black/40 border border-white/10 rounded-2xl flex items-center justify-center mb-6 shadow-inner group-hover:scale-110 group-hover:bg-cyan-900/20 transition-all duration-500">
+        {icon}
+      </div>
+      <h3 className="text-xl font-semibold text-gray-100 mb-3 tracking-wide">{title}</h3>
+      <p className="text-sm text-gray-400 leading-relaxed font-light">{desc}</p>
+    </div>
   )
 }
