@@ -418,4 +418,5 @@ SentinelIQ/
 <p align="center">
   <b>SentinelIQ</b> — Because every second counts when water rises.<br/>
   <sub>Made with 🛰️ from Earth, for Earth.</sub>
+  
 </p>
