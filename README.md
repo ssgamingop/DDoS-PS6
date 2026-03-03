@@ -46,7 +46,9 @@ We synthesize **real-time Copernicus Sentinel-2 satellite imagery** with **Googl
 ## ✨ Hero
 
 <p align="center">
-  <img src="assets/screenshots/dashboard.png" alt="SentinelIQ Dashboard" width="90%" />
+  <video autoplay loop muted playsinline>
+    <source src="assets/screenshots/dashboard.mp4" type="video/mp4"/>
+  </video>
 </p>
 
 <p align="center">
