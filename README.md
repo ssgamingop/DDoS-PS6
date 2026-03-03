@@ -268,13 +268,13 @@ earthengine authenticate
 ### 3️⃣ Start the API server
 
 ```bash
-uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
+uvicorn backend.api:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### 4️⃣ Frontend setup
 
 ```bash
-cd dashboard
+cd frontend
 npm install
 npm run dev
 ```
@@ -290,7 +290,7 @@ npm run dev
 ### 6️⃣ Run the offline pipeline (optional)
 
 ```bash
-python run_pipeline.py
+python -m backend.run_pipeline
 ```
 
 > Processes satellite imagery through ingestion → preprocessing → detection → risk classification and outputs results to `output/risk_report.json`.
@@ -305,21 +305,23 @@ python run_pipeline.py
 
 ```
 SentinelIQ/
-├── 🚀 run_pipeline.py             # Offline satellite processing pipeline
 ├── 📋 requirements.txt            # Python dependencies
+├── ⚙️ config.yaml                 # Region, satellite, detection parameters
+├── 🚀 start.sh                    # One-command launcher (backend + frontend)
 │
-├── src/                            # ⚙️ Backend Core
+├── backend/                        # ⚙️ Backend Core
 │   ├── api.py                      # FastAPI REST server
 │   ├── config.py                   # YAML config loader + rolling date windows
-│   ├── config.yaml                 # Region, satellite, detection parameters
+│   ├── run_pipeline.py             # Offline satellite processing pipeline
 │   ├── ingestion.py                # GEE satellite image ingestion & export
+│   ├── preprocessing.py            # NDWI computation from raw GeoTIFFs
 │   ├── detection.py                # NDWI water detection + morphological filtering
 │   ├── risk_engine.py              # Hybrid risk classification engine
 │   ├── gee_analysis.py             # Live GEE point-analysis with multi-factor scoring
 │   ├── database.py                 # SQLite persistence layer
 │   └── logging_utils.py            # Structured JSON logging
 │
-├── dashboard/                      # 🎨 Next.js Frontend
+├── frontend/                       # 🎨 Next.js Frontend
 │   └── app/
 │       ├── page.tsx                # Cinematic landing page
 │       ├── layout.tsx              # Root layout + metadata
@@ -331,6 +333,8 @@ SentinelIQ/
 │           ├── RightPanel.tsx      # Analytics charts + risk indicators
 │           ├── LeftPanel.tsx       # Scan controls + location info
 │           └── BottomBar.tsx       # History timeline
+│
+├── ml_training/                    # 🧪 ML Training Notebooks & Data
 │
 ├── data/                           # 📦 Data Artifacts
 │   ├── raw/                        # Exported satellite GeoTIFFs
